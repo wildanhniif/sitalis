@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222 25% 12%;
+  --card: 0 0% 100%;
+  --muted: 220 20% 97%;
+  --muted-foreground: 220 10% 38%;
+  --border: 220 16% 89%;
+  --primary: 239 72% 52%;
+  --primary-foreground: 0 0% 100%;
+}
+
+.dark {
+  --background: 222 24% 7%;
+  --foreground: 210 20% 96%;
+  --card: 222 22% 9%;
+  --muted: 222 18% 12%;
+  --muted-foreground: 215 14% 68%;
+  --border: 220 14% 20%;
+  --primary: 234 80% 72%;
+  --primary-foreground: 230 35% 10%;
+}
+
+* { border-color: hsl(var(--border)); }
+html { scroll-behavior: smooth; }
+body { background: hsl(var(--background)); color: hsl(var(--foreground)); }
+::selection { background: hsl(var(--primary) / .18); }
+
+@layer base {
+  * { @apply outline-none; }
+  *:focus-visible { @apply ring-2 ring-primary ring-offset-2 ring-offset-background; }
+}
+
+@layer components {
+  .page-container { @apply mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8; }
+  .card { @apply rounded-xl border bg-card shadow-card; }
+  .subtle-grid { background-image: linear-gradient(hsl(var(--border) / .32) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--border) / .32) 1px, transparent 1px); background-size: 32px 32px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+@media print {
+  :root, .dark { --background: 0 0% 100%; --foreground: 0 0% 0%; --card: 0 0% 100%; --muted: 0 0% 96%; --muted-foreground: 0 0% 25%; --border: 0 0% 78%; }
+  .no-print { display: none !important; }
+  .print-block { display: block !important; }
+  .print-full { max-width: none !important; padding: 0 !important; }
+  .card { box-shadow: none !important; break-inside: avoid; }
+  body { font-size: 10pt; }
+  a { color: inherit !important; text-decoration: none; }
+  @page { margin: 14mm; }
+}
