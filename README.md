@@ -2,15 +2,18 @@
 
 Aplikasi web untuk memeriksa keberadaan referensi dan kesesuaian metadatanya dengan Crossref. CekSitasi memberikan **dugaan yang disertai bukti, bukan vonis** bahwa suatu referensi pasti palsu. Sistem tidak menilai apakah isi kutipan mendukung argumen dalam naskah.
 
+Panduan langkah demi langkah dari instalasi sampai LLM dan Crossref berfungsi tersedia di [PANDUAN_PENGGUNAAN.md](PANDUAN_PENGGUNAAN.md).
+
 ## Fitur
 
 - Unggah PDF/DOCX maksimal 10 MB atau tempel daftar pustaka.
 - Deteksi bagian Daftar Pustaka terakhir, pemisahan entri, dan editor sebelum pemeriksaan.
-- Parsing referensi menjadi JSON melalui LLM; hanya teks referensi yang dikirim, bukan naskah lengkap.
+- Parsing referensi menjadi JSON melalui LLM; hanya teks referensi yang dikirim, bukan naskah lengkap. Ringkasan abstrak opsional hanya mengirim abstrak karya dari Crossref saat tombol ditekan.
 - Pemeriksaan DOI, agency DOI, dan pencarian bibliografis penuh ke Crossref.
 - Skor kemiripan judul, penulis, tahun, dan wadah publikasi; pembanding LLM hanya untuk kandidat ambigu.
 - Label Valid, Sebagian valid, Dugaan halusinasi, dan Tidak terverifikasi beserta alasan dan bukti.
 - Laporan dengan filter, pencarian, perbandingan metadata, koreksi manual, tautan Scholar/GARUDA, ekspor CSV, dan cetak/PDF browser.
+- Ringkasan LLM on-demand maksimal dua kalimat dari abstrak Crossref untuk karya yang ditemukan, dengan batas keluaran 180 token.
 - Riwayat di browser, mode terang/gelap, tampilan mobile, serta demo tanpa API key.
 - CLI evaluasi dengan precision, recall, F1, macro-F1, confusion matrix, FPR, waktu, dan token.
 

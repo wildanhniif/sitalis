@@ -1,7 +1,7 @@
 # CekSitasi — Rencana Implementasi
 
 ## Prinsip tetap
-Crossref adalah sumber fakta; LLM hanya parser dan pembanding. Hanya teks referensi yang dikirim ke LLM. Hasil adalah dugaan, bukan vonis. Tidak ada login, basis data server, pembayaran, OCR, atau fitur di luar ruang lingkup.
+Crossref adalah sumber fakta; LLM menjadi parser, pembanding, dan pembuat ringkasan abstrak opsional. Hanya teks referensi serta abstrak Crossref yang dipilih pengguna yang dapat dikirim ke LLM; naskah lengkap tidak pernah dikirim. Hasil adalah dugaan, bukan vonis. Tidak ada login, basis data server, pembayaran, OCR, atau fitur di luar ruang lingkup.
 
 ## Milestone
 1. **Fondasi**: Next.js App Router + TypeScript + Tailwind, konfigurasi env, struktur domain, DESIGN.md, klien Crossref (queue, cache JSON/Map, timeout, retry), test mock. Commit setelah test lulus.
@@ -10,6 +10,7 @@ Crossref adalah sumber fakta; LLM hanya parser dan pembanding. Hanya teks refere
 4. **UI**: halaman Check, editor referensi, progres live, hasil/filter/detail bukti/koreksi label, riwayat browser. Commit setelah typecheck dan test lulus.
 5. **Fitur pendukung**: Settings, demo tanpa API key, CSV, cetak, About, tema dan responsive state. Commit setelah pemeriksaan lulus.
 6. **Polish**: audit 360 px dan desktop, aksesibilitas, README, lint/typecheck/test/build, perbaikan akhir dan commit.
+7. **Ringkasan dan panduan**: tambahkan ringkasan LLM on-demand dengan keluaran 180 token dari abstrak Crossref, serta panduan lokal dari instalasi sampai pemeriksaan nyata. Commit setelah pemeriksaan lulus.
 
 ## Keputusan teknis awal
 - Next.js route handlers berjalan di Node.js; data hasil pemeriksaan disimpan dalam memori server dan disalin ke localStorage browser.
