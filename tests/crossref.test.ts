@@ -12,6 +12,7 @@ const work = {
   issued: { "date-parts": [[2023]] },
   "container-title": ["Journal of Testing"],
   type: "journal-article",
+  abstract: "<jats:p>A study about reliable citation validation.</jats:p>",
 };
 
 function response(body: unknown, status = 200, headers = new Headers()) {
@@ -42,6 +43,7 @@ describe("CrossrefClient", () => {
     const url = new URL(fetcher.mock.calls[0][0]);
     expect(url.searchParams.get("query.bibliographic")).toBe("Santoso, A valid title, 2023");
     expect(url.searchParams.get("rows")).toBe("5");
+    expect(url.searchParams.get("select")).toContain("abstract");
     expect(url.searchParams.get("mailto")).toBe("test@example.com");
   });
 

@@ -36,7 +36,7 @@ export class LlmClient {
     this.fetcher = options.fetcher ?? fetch;
   }
 
-  async chat(system: string, user: string, schema: z.ZodType, jsonMode = true): Promise<{ data: unknown; tokens: number }> {
+  async chat(system: string, user: string, schema: z.ZodType, jsonMode = true, maxTokens?: number): Promise<{ data: unknown; tokens: number }> {
     const base = this.options.baseUrl.replace(/\/$/, "");
     if (!base || !this.options.model) throw new Error("Konfigurasi LLM belum lengkap.");
     const response = await this.fetcher(`${base}/chat/completions`, {
@@ -49,12 +49,13 @@ export class LlmClient {
         model: this.options.model,
         messages: [{ role: "system", content: system }, { role: "user", content: user }],
         temperature: 0,
+        ...(maxTokens ? { max_tokens: maxTokens } : {}),
         ...(jsonMode ? { response_format: { type: "json_object" } } : {}),
       }),
       signal: AbortSignal.timeout(45_000),
     });
     if (!response.ok) {
-      if (jsonMode && (response.status === 400 || response.status === 422)) return this.chat(system, user, schema, false);
+      if (jsonMode && (response.status === 400 || response.status === 422)) return this.chat(system, user, schema, false, maxTokens);
       const detail = (await response.text()).slice(0, 300);
       throw new Error(`LLM mengembalikan HTTP ${response.status}. ${detail}`);
     }

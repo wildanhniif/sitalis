@@ -10,6 +10,7 @@ const work = {
   volume: "518",
   issue: "7540",
   page: "529-533",
+  abstract: "<jats:p>The theory of reinforcement learning provides a normative account, deeply rooted in psychological and neuroscientific perspectives on animal behaviour, of how agents may optimize their control of an environment. To use reinforcement learning successfully in situations approaching real-world complexity, however, agents are confronted with a difficult task: they must derive efficient representations of the environment from high-dimensional sensory inputs, and use these to generalize past experience to new situations.</jats:p>",
 };
 
 export const demoReferenceTexts = [

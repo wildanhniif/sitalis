@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { extractJson, LlmClient } from "@/lib/llm/client";
 import { extractDoi, parseReference } from "@/lib/llm/parser";
+import { maxSummaryTokens, summarizeWork } from "@/lib/llm/summary";
 
 const parsed = { authors: ["Santoso, Andi"], year: 2023, title: "A valid title", container: "Journal", volume: null, issue: null, pages: null, doi: null, url: null, source_type: "journal" };
 
@@ -31,4 +32,19 @@ describe("LLM adapter and parser", () => {
     expect(result.parsed?.title).toBe("A valid title");
     expect(JSON.parse(fetcher.mock.calls[1][1].body).response_format).toBeUndefined();
   });
+
+  it("summarizes only the Crossref abstract with a small output limit", async () => {
+    const fetcher = vi.fn().mockResolvedValue(responseFor("{\"summary\":\"Karya ini membahas pengujian sitasi yang andal.\"}", 42));
+    const llm = new LlmClient({ baseUrl: "https://llm.test/v1", apiKey: "secret", model: "model", fetcher });
+    const result = await summarizeWork("A valid title", "<jats:p>A detailed abstract about reliable citation testing.</jats:p>", llm);
+    expect(result).toEqual({ summary: "Karya ini membahas pengujian sitasi yang andal.", tokens: 42 });
+    const body = JSON.parse(fetcher.mock.calls[0][1].body);
+    expect(body.max_tokens).toBe(maxSummaryTokens);
+    expect(body.messages[1].content).toContain("reliable citation testing");
+    expect(body.messages[1].content).not.toContain("<jats:p>");
+  });
 });
+
+function responseFor(content: string, tokens: number) {
+  return new Response(JSON.stringify({ choices: [{ message: { content } }], usage: { total_tokens: tokens } }));
+}

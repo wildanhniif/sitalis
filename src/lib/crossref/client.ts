@@ -80,7 +80,7 @@ export class CrossrefClient {
     const query = new URLSearchParams({
       "query.bibliographic": referenceText,
       rows: "5",
-      select: "DOI,title,author,issued,container-title,type,volume,issue,page",
+      select: "DOI,title,author,issued,container-title,type,volume,issue,page,abstract",
       mailto: this.options.email,
     });
     const result = await this.searchQueue.run(() =>

@@ -36,6 +36,7 @@ export const crossrefWorkSchema = z.object({
   volume: z.string().optional(),
   issue: z.string().optional(),
   page: z.string().optional(),
+  abstract: z.string().optional(),
 });
 
 export const labels = ["valid", "partial", "suspected", "unverified"] as const;
@@ -73,6 +74,7 @@ export type CheckResult = {
   comparatorUsed: boolean;
   manualLabel?: Label;
   confirmed?: boolean;
+  aiSummary?: { text: string; tokens: number; doi: string };
   elapsedMs: number;
   tokens: number;
 };
