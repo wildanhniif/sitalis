@@ -1,0 +1,21 @@
+id,reference_text,true_label,source_type
+1,"Mnih, V., Kavukcuoglu, K., Silver, D., et al. (2015). Human-level control through deep reinforcement learning. Nature, 518, 529-533. https://doi.org/10.1038/nature14236",valid,journal
+2,"LeCun, Y., Bengio, Y., & Hinton, G. (2015). Deep learning. Nature, 521, 436-444. https://doi.org/10.1038/nature14539",valid,journal
+3,"Vaswani, A., Shazeer, N., Parmar, N., et al. (2017). Attention is all you need. Advances in Neural Information Processing Systems, 30.",valid,conference
+4,"Devlin, J., Chang, M. W., Lee, K., & Toutanova, K. (2019). BERT: Pre-training of deep bidirectional transformers for language understanding. Proceedings of NAACL-HLT, 4171-4186.",valid,conference
+5,"Mnih, V., et al. (2014). Human-level control through deep reinforcement learning. Nature, 518, 529-533. https://doi.org/10.1038/nature14236",partial,journal
+6,"LeCun, Y., Bengio, Y., & Hinton, G. (2015). Deep learning. Neural Computation, 521, 436-444. https://doi.org/10.1038/nature14539",partial,journal
+7,"He, K., Zhang, X., Ren, S., & Sun, J. (2015). Deep residual learning for image recognition. Proceedings of CVPR, 770-778.",partial,conference
+8,"Ramadhan, F. (2023). Self-healing neural networks for autonomous citation repair. International Journal of Synthetic Intelligence, 9(2), 41-59.",suspected,journal
+9,"Putri, N. (2024). Quantum transformers for deterministic bibliography generation. Journal of Imaginary Machine Learning, 12(1), 1-20.",suspected,journal
+10,"Santoso, R. (2022). Blockchain-based semantic memory for self-citing manuscripts. International Conference on Nonexistent Computing, 88-97.",suspected,conference
+11,"Wijaya, T. (2025). Recursive citation validation using invisible language models. Journal of Hallucinated Studies, 3(4), 100-115.",suspected,journal
+12,"Kementerian Pendidikan dan Kebudayaan. (2020). Panduan penyusunan kurikulum pendidikan tinggi. Jakarta: Ditjen Dikti.",unverified,report
+13,"Republik Indonesia. (2003). Undang-Undang Nomor 20 Tahun 2003 tentang Sistem Pendidikan Nasional.",unverified,regulation
+14,"Pressman, R. S. (2014). Software Engineering: A Practitioner's Approach. New York: McGraw-Hill Education.",unverified,book
+15,"Denzin, N. K., & Lincoln, Y. S. (2018). The SAGE Handbook of Qualitative Research. Thousand Oaks: SAGE.",unverified,book
+16,"Santoso, A. (2021). Analisis penerimaan teknologi pada perguruan tinggi. Tesis magister, Universitas Contoh.",unverified,thesis
+17,"OpenAI. (2023). GPT-4 Technical Report. Technical report.",unverified,report
+18,"Google. (2024). Google Scholar. https://scholar.google.com/",unverified,web
+19,"Kusuma, D. (2024). Autonomous bibliographic hallucination detection with synthetic DOI graphs. Journal of Fictional Informatics, 7(1), 10-29.",suspected,journal
+20,"Silver, D., et al. (2016). Mastering the game of Go with deep neural networks and tree search. Nature, 529, 484-489. https://doi.org/10.1038/nature16961",valid,journal
