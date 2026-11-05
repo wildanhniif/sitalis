@@ -1,7 +1,7 @@
-# CekSitasi — Design System
+# Sitalis — Design System
 
 ## Arah visual
-CekSitasi adalah alat riset yang tenang, presisi, dan dapat dipercaya. Antarmuka mengutamakan ruang kosong, hierarki tipografi, dan informasi yang dapat dipindai. Tidak ada gradien dekoratif, glow, atau ilustrasi AI generik. Bentuk utama: panel putih/charcoal, garis batas tipis, bayangan sangat halus, dan satu aksen indigo.
+Sitalis adalah alat riset yang tenang, presisi, dan dapat dipercaya. Antarmuka mengutamakan ruang kosong, hierarki tipografi, dan informasi yang dapat dipindai. Tidak ada gradien dekoratif, glow, atau ilustrasi AI generik. Bentuk utama: panel putih/charcoal, garis batas tipis, bayangan sangat halus, dan satu aksen indigo.
 
 ## Warna
 Menggunakan semantic tokens HSL agar konsisten di mode terang dan gelap.

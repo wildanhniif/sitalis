@@ -9,3 +9,8 @@ predictions.csv
 metrics.json
 *.tsbuildinfo
 .DS_Store
+
+# Materi riset lokal: tidak ikut dipublikasikan ke repositori
+mentahan penelitian/
+daftar pustaka/
+referensi_output/

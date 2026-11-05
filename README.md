@@ -1,6 +1,14 @@
-# CekSitasi
+# Sitalis
 
-Aplikasi web untuk memeriksa keberadaan referensi dan kesesuaian metadatanya dengan Crossref. CekSitasi memberikan **dugaan yang disertai bukti, bukan vonis** bahwa suatu referensi pasti palsu. Sistem tidak menilai apakah isi kutipan mendukung argumen dalam naskah.
+**Sistem pendukung keputusan untuk mendeteksi referensi halusinasi pada naskah akademik.**
+Memeriksa keberadaan karya dan kesesuaian metadatanya terhadap Crossref, lalu menyajikan bukti per field — dugaan yang dapat diaudit, bukan vonis.
+
+![Next.js](https://img.shields.io/badge/Next.js-16-000000?logo=nextdotjs&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
+![Vitest](https://img.shields.io/badge/tests-41%20lulus-6E9F18?logo=vitest&logoColor=white)
+![Konteks](https://img.shields.io/badge/konteks-skripsi%20S1%20Informatika-1f6feb)
+
+Aplikasi web untuk memeriksa keberadaan referensi dan kesesuaian metadatanya dengan Crossref. Sitalis memberikan **dugaan yang disertai bukti, bukan vonis** bahwa suatu referensi pasti palsu. Sistem tidak menilai apakah isi kutipan mendukung argumen dalam naskah.
 
 Panduan langkah demi langkah dari instalasi sampai LLM dan Crossref berfungsi tersedia di [PANDUAN_PENGGUNAAN.md](PANDUAN_PENGGUNAAN.md).
 
@@ -13,9 +21,10 @@ Panduan langkah demi langkah dari instalasi sampai LLM dan Crossref berfungsi te
 - Skor kemiripan judul, penulis, tahun, dan wadah publikasi; pembanding LLM hanya untuk kandidat ambigu.
 - Label Valid, Sebagian valid, Dugaan halusinasi, dan Tidak terverifikasi beserta alasan dan bukti.
 - Laporan dengan filter, pencarian, perbandingan metadata, koreksi manual, tautan Scholar/GARUDA, ekspor CSV, dan cetak/PDF browser.
+- Deteksi sumber akademik Indonesia (GARUDA, SINTA, repositori kampus, regulasi RI) dengan badge kategori dan tautan pencarian portal nasional.
 - Ringkasan LLM on-demand maksimal dua kalimat dari abstrak Crossref untuk karya yang ditemukan, dengan batas keluaran 180 token.
 - Riwayat di browser, mode terang/gelap, tampilan mobile, serta demo tanpa API key.
-- CLI evaluasi dengan precision, recall, F1, macro-F1, confusion matrix, FPR, waktu, dan token.
+- CLI evaluasi dengan precision, recall, F1, macro-F1, confusion matrix, FPR, waktu, dan token terhadap dataset benchmark (`data/benchmark_60.csv`).
 
 ## Menjalankan aplikasi
 
@@ -81,10 +90,28 @@ Buka `/result/demo` atau klik **Lihat demo** di beranda. Demo berisi empat hasil
 
 ## Evaluasi penelitian
 
-Siapkan CSV dengan kolom wajib `id,reference_text,true_label,source_type`. `true_label` harus salah satu dari `valid`, `partial`, `suspected`, atau `unverified`; setiap `id` harus unik. Kolom `source_type` adalah metadata dataset; pipeline menentukan jenis sumber dari teks referensi.
+Ringkasan hasil pengujian end-to-end pada dataset benchmark 60 entri (15 per kelas), dijalankan langsung terhadap Crossref dan LLM:
 
+| Metrik | Nilai |
+| :--- | :--- |
+| Akurasi keseluruhan | 80,00% (48/60) |
+| Macro-F1 | 0,7910 |
+| Recall *diduga halusinasi* | 100% (15/15) |
+| Recall *belum terverifikasi* | 100% (15/15) |
+| Rata-rata waktu pemrosesan | 3,95 detik per referensi |
+
+Rincian per label, confusion matrix, dan pembahasan ada di [LAPORAN_BENCHMARK.md](LAPORAN_BENCHMARK.md); posisi riset terhadap penelitian pembanding ada di [ANALISIS_NOVELTY.md](ANALISIS_NOVELTY.md).
+
+Tersedia dataset benchmark seimbang 60 entri di `data/benchmark_60.csv` (15 valid, 15 partial, 15 suspected, 15 unverified).
+
+Validasi integritas struktur dataset dapat dilakukan kapan saja tanpa API key:
 ```bash
-npm run eval -- data/test.csv
+npx tsx scripts/validate-dataset.ts data/benchmark_60.csv
+```
+
+Untuk menjalankan evaluasi lengkap:
+```bash
+npm run eval -- data/benchmark_60.csv
 ```
 
 Perintah membaca `.env`, menjalankan pipeline yang sama dengan aplikasi, lalu menulis (dan menimpa):

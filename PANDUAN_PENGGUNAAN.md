@@ -1,4 +1,4 @@
-# Panduan Menjalankan CekSitasi sampai Berfungsi
+# Panduan Menjalankan Sitalis sampai Berfungsi
 
 Dokumen ini ditujukan untuk penggunaan lokal di Windows. Ikuti urutannya dari awal jika baru pertama kali menjalankan proyek. Jika dependensi dan `.env` sudah siap, langsung lihat bagian **Menjalankan aplikasi**.
 
@@ -6,7 +6,7 @@ Dokumen ini ditujukan untuk penggunaan lokal di Windows. Ikuti urutannya dari aw
 
 Setelah semua langkah berhasil, Anda dapat:
 
-- membuka CekSitasi di browser;
+- membuka Sitalis di browser;
 - menguji koneksi LLM dan Crossref dari halaman Pengaturan;
 - menempel referensi atau mengunggah PDF/DOCX;
 - meninjau pemisahan referensi sebelum pemeriksaan;
@@ -108,7 +108,7 @@ Langkah provider:
 
 `LLM_BASE_URL` tidak diakhiri `/chat/completions`, karena path tersebut ditambahkan oleh aplikasi. Nama model dan ketersediaan layanan dapat berubah; contoh di `.env.example` bukan jaminan model masih aktif. Periksa dashboard resmi provider jika mendapat error model.
 
-Token API dapat memiliki biaya atau kuota. CekSitasi memanggil LLM satu kali atau lebih per referensi untuk parsing, dan dapat memanggil comparator pada kandidat ambigu. Ringkasan abstrak tidak otomatis; satu permintaan tambahan hanya terjadi jika Anda menekan **Ringkas dengan AI**, dengan keluaran dibatasi 180 token.
+Token API dapat memiliki biaya atau kuota. Sitalis memanggil LLM satu kali atau lebih per referensi untuk parsing, dan dapat memanggil comparator pada kandidat ambigu. Ringkasan abstrak tidak otomatis; satu permintaan tambahan hanya terjadi jika Anda menekan **Ringkas dengan AI**, dengan keluaran dibatasi 180 token.
 
 ## 6B. Alternatif: Ollama lokal
 
@@ -245,10 +245,16 @@ id,reference_text,true_label,source_type
 
 `id` harus unik. `true_label` berisi `valid`, `partial`, `suspected`, atau `unverified`. `source_type` adalah metadata dataset; pipeline tetap menentukan jenis sumber dari teks referensi.
 
-Jalankan:
+Jalankan evaluasi menggunakan dataset benchmark 60 entri:
 
 ```bash
-npm run eval -- data/test.csv
+npm run eval -- data/benchmark_60.csv
+```
+
+Validasi integritas dataset dapat dilakukan kapan saja tanpa memanggil API:
+
+```bash
+npx tsx scripts/validate-dataset.ts data/benchmark_60.csv
 ```
 
 Output:
@@ -256,7 +262,7 @@ Output:
 - `predictions.csv`;
 - `metrics.json`.
 
-Evaluasi memakai pipeline dan kredensial yang sama sehingga dapat menghabiskan kuota LLM. `data/sample.csv` hanya contoh untuk menguji CLI, bukan ground truth benchmark tervalidasi. Jangan menggunakannya sebagai klaim performa penelitian.
+Evaluasi memakai pipeline dan kredensial yang sama sehingga dapat menghabiskan kuota LLM. Gunakan `data/benchmark_60.csv` yang sudah memiliki ground truth seimbang 4 kelas untuk pelaporan performa Bab 4 skripsi.
 
 ## 13. Menjalankan mode produksi lokal
 
@@ -339,7 +345,7 @@ Node.js/npm belum terpasang atau terminal belum dibuka ulang setelah instalasi. 
 - Hanya teks referensi yang dikirim untuk parsing; comparator menerima entry dan satu kandidat ambigu.
 - Crossref menerima DOI atau teks bibliografis untuk pencarian.
 - Abstrak tidak ikut pada pemeriksaan utama. Abstrak karya dari Crossref baru dikirim ke LLM jika Anda menekan **Ringkas dengan AI**; naskah lengkap tidak dikirim.
-- CekSitasi memeriksa keberadaan referensi dan kesesuaian metadata, bukan kebenaran isi, konteks kutipan, plagiarisme, atau kualitas penelitian.
+- Sitalis memeriksa keberadaan referensi dan kesesuaian metadata, bukan kebenaran isi, konteks kutipan, plagiarisme, atau kualitas penelitian.
 - Crossref tidak lengkap untuk semua buku, tesis, laporan, regulasi, web, jurnal lokal, dan karya baru. Selalu periksa sumber asli sebelum menyimpulkan.
 
 ## 17. Pemeriksaan teknis untuk pengembang
