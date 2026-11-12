@@ -1,10 +1,12 @@
 import type { Config } from "tailwindcss";
+import tailwindcssAnimate from "tailwindcss-animate";
 
 export default {
   darkMode: ["class"],
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
+      fontFamily: { sans: ["var(--font-geist)", "ui-sans-serif", "system-ui", "sans-serif"] },
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
@@ -19,5 +21,5 @@ export default {
       boxShadow: { card: "0 1px 2px rgb(0 0 0 / 0.035)" },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [tailwindcssAnimate],
 } satisfies Config;
