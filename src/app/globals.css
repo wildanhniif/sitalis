@@ -3,41 +3,69 @@
 @tailwind utilities;
 
 :root {
-  --background: 0 0% 100%;
-  --foreground: 222 25% 12%;
+  /* Editorial, crisp, high-clarity color system */
+  --background: 210 20% 98.5%;
+  --foreground: 220 30% 12%;
   --card: 0 0% 100%;
-  --muted: 220 20% 97%;
-  --muted-foreground: 220 10% 38%;
-  --border: 220 16% 89%;
-  --primary: 239 72% 52%;
-  --primary-foreground: 0 0% 100%;
+  --card-foreground: 220 30% 12%;
+  --muted: 215 22% 95%;
+  --muted-foreground: 218 14% 42%;
+  --border: 216 20% 89%;
+  --ring: 222 47% 18%;
+
+  /* Premium deep ink primary */
+  --primary: 222 47% 18%;
+  --primary-foreground: 210 40% 98%;
+  --primary-hover: 222 47% 12%;
+
+  /* Subtle contextual surfaces */
+  --surface-subtle: 215 24% 96.5%;
+  --surface-inset: 215 20% 94%;
 }
 
 .dark {
-  --background: 222 24% 7%;
-  --foreground: 210 20% 96%;
-  --card: 222 22% 9%;
-  --muted: 222 18% 12%;
-  --muted-foreground: 215 14% 68%;
-  --border: 220 14% 20%;
-  --primary: 234 80% 72%;
-  --primary-foreground: 230 35% 10%;
+  --background: 222 28% 7%;
+  --foreground: 214 24% 94%;
+  --card: 222 26% 9.5%;
+  --card-foreground: 214 24% 94%;
+  --muted: 222 20% 13.5%;
+  --muted-foreground: 217 14% 62%;
+  --border: 220 18% 18%;
+  --ring: 212 90% 64%;
+
+  --primary: 212 90% 64%;
+  --primary-foreground: 222 47% 10%;
+  --primary-hover: 212 90% 70%;
+
+  --surface-subtle: 222 24% 11%;
+  --surface-inset: 222 26% 8%;
 }
 
 * { border-color: hsl(var(--border)); }
-html { scroll-behavior: smooth; }
-body { background: hsl(var(--background)); color: hsl(var(--foreground)); }
-::selection { background: hsl(var(--primary) / .18); }
+html {
+  scroll-behavior: smooth;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+body {
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  letter-spacing: -0.011em;
+}
+::selection { background: hsl(var(--primary) / .15); }
 
 @layer base {
   * { @apply outline-none; }
-  *:focus-visible { @apply ring-2 ring-primary ring-offset-2 ring-offset-background; }
+  *:focus-visible { @apply ring-2 ring-ring ring-offset-2 ring-offset-background; }
 }
 
 @layer components {
-  .page-container { @apply mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8; }
-  .card { @apply rounded-xl border bg-card shadow-card; }
-  .subtle-grid { background-image: linear-gradient(hsl(var(--border) / .32) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--border) / .32) 1px, transparent 1px); background-size: 32px 32px; }
+  .page-container { @apply mx-auto w-full max-w-[1240px] px-4 sm:px-6 lg:px-8; }
+  .card { @apply rounded-xl border border-border/80 bg-card shadow-card transition-all; }
+  .card-hover { @apply card hover:border-border hover:shadow-float; }
+  .subtle-grid {
+    background-image: radial-gradient(hsl(var(--foreground) / .08) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
