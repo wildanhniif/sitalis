@@ -1,3 +1,4 @@
+import type { StoredSkill } from "@/lib/llm/skill";
 import { randomUUID } from "node:crypto";
 import type { CrossrefClient } from "@/lib/crossref/client";
 import { LlmResponseError, type LlmClient } from "@/lib/llm/client";
@@ -8,14 +9,14 @@ import type { Candidate, CheckResult, CrossrefWork } from "@/lib/types";
 import { foundLabel, notFoundLabel } from "./label";
 import { detectIndonesianSource } from "./indonesian-sources";
 
-type Dependencies = { crossref: CrossrefClient; llm: LlmClient };
+type Dependencies = { crossref: CrossrefClient; llm: LlmClient; skill?: StoredSkill };
 
 export async function checkReference(referenceText: string, dependencies: Dependencies, id: string = randomUUID()): Promise<CheckResult> {
   const started = Date.now();
   let tokens = 0;
   const base = { id, referenceText, candidates: [], comparatorUsed: false, elapsedMs: 0, tokens: 0 };
   const finish = (result: Omit<CheckResult, "elapsedMs" | "tokens">): CheckResult => ({ ...result, elapsedMs: Date.now() - started, tokens });
-  const parsedOutcome = await parseReference(referenceText, dependencies.llm);
+  const parsedOutcome = await parseReference(referenceText, dependencies.llm, dependencies.skill);
   tokens += parsedOutcome.tokens;
   if (!parsedOutcome.parsed) {
     return finish({ ...base, parsed: null, parseError: parsedOutcome.error, label: "unverified", reason: "Referensi gagal diubah menjadi metadata terstruktur.", evidence: parsedOutcome.error ?? "Respons LLM tidak valid.", bestCandidate: null });
@@ -60,7 +61,7 @@ export async function checkReference(referenceText: string, dependencies: Depend
 
   if (ambiguous && best) {
     try {
-      const comparison = await compareWorks(entry, best.work, dependencies.llm);
+      const comparison = await compareWorks(entry, best.work, dependencies.llm, dependencies.skill);
       tokens += comparison.tokens;
       found = comparison.same_work;
       evidence += `Pembanding LLM: ${comparison.reason} `;

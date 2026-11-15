@@ -1,10 +1,9 @@
 import { z } from "zod";
 import { parsedReferenceSchema, type ParsedReference } from "@/lib/types";
 import { extractJson, LlmClient, LlmResponseError } from "./client";
+import { buildSkillPrompt, type StoredSkill } from "./skill";
 
-const parserSystem = `You extract bibliography metadata. Return JSON only with keys authors (array of full names as written), year, title, container, volume, issue, pages, doi, url, source_type. Allowed source_type: journal, conference, book, thesis, report, regulation, web, other. Use null when a value is not stated. Never guess, correct, complete, or use memory.`;
 const comparatorSchema = z.object({ same_work: z.boolean(), differing_fields: z.array(z.string()), reason: z.string() });
-const comparatorSystem = `Compare the supplied reference entry and Crossref record. Decide only whether they describe the same work from the supplied data. Never judge existence from memory. Return JSON only: same_work (boolean), differing_fields (string array), reason (brief string).`;
 
 export function extractDoi(text: string): string | null {
   const match = text.match(/10\.\d{4,9}\/[-._;()/:A-Z0-9]+/i);
@@ -13,13 +12,13 @@ export function extractDoi(text: string): string | null {
 
 export type ParseOutcome = { parsed: ParsedReference | null; error?: string; tokens: number };
 
-export async function parseReference(referenceText: string, llm: LlmClient): Promise<ParseOutcome> {
+export async function parseReference(referenceText: string, llm: LlmClient, skill?: StoredSkill): Promise<ParseOutcome> {
   let tokens = 0;
   let lastError = "";
   const doi = extractDoi(referenceText);
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
-      const response = await llm.chat(parserSystem, referenceText, parsedReferenceSchema);
+      const response = await llm.chat(buildSkillPrompt("parser", skill), referenceText, parsedReferenceSchema);
       tokens += response.tokens;
       const parsed = parsedReferenceSchema.parse(response.data);
       if (doi) parsed.doi = doi;
@@ -32,8 +31,8 @@ export async function parseReference(referenceText: string, llm: LlmClient): Pro
   return { parsed: null, error: `Gagal memparse setelah 3 percobaan: ${lastError}`, tokens };
 }
 
-export async function compareWorks(entry: ParsedReference, candidate: unknown, llm: LlmClient) {
-  const response = await llm.chat(comparatorSystem, JSON.stringify({ entry, crossref_candidate: candidate }), comparatorSchema);
+export async function compareWorks(entry: ParsedReference, candidate: unknown, llm: LlmClient, skill?: StoredSkill) {
+  const response = await llm.chat(buildSkillPrompt("comparator", skill), JSON.stringify({ entry, crossref_candidate: candidate }), comparatorSchema);
   return { ...comparatorSchema.parse(response.data), tokens: response.tokens };
 }
 

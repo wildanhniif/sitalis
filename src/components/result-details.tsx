@@ -1,4 +1,5 @@
 "use client";
+import { getStoredSkill } from "@/lib/llm/skill";
 import { Check, CircleAlert, ExternalLink, Loader2, Pencil, Search, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { summarizeAbstract } from "@/lib/abstract";
@@ -64,7 +65,7 @@ function WorkSummary({
       const response = await fetch("/api/summarize", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ doi: work.DOI }),
+        body: JSON.stringify({ doi: work.DOI, skill: getStoredSkill() }),
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || "Ringkasan AI tidak dapat dibuat.");

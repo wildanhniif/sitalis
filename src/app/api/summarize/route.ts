@@ -1,3 +1,4 @@
+import { skillSchema, type StoredSkill } from "@/lib/llm/skill";
 import { z } from "zod";
 import { getCrossrefClient } from "@/lib/crossref/client";
 import { getLlmClient, LlmResponseError } from "@/lib/llm/client";
@@ -7,6 +8,7 @@ export const runtime = "nodejs";
 export const maxDuration = 60;
 
 const inputSchema = z.object({
+  skill: skillSchema.nullish(),
   doi: z.string().trim().max(300).regex(/^10\.\d{4,9}\/\S+$/i, "Format DOI tidak valid."),
 });
 
@@ -14,8 +16,11 @@ const noStore = { "Cache-Control": "no-store" };
 
 export async function POST(request: Request) {
   let doi: string;
+  let skill: StoredSkill | undefined;
   try {
-    doi = inputSchema.parse(await request.json()).doi;
+    const input = inputSchema.parse(await request.json());
+    doi = input.doi;
+    skill = input.skill ?? undefined;
   } catch {
     return Response.json({ error: "DOI yang diminta tidak valid." }, { status: 400, headers: noStore });
   }
@@ -32,7 +37,7 @@ export async function POST(request: Request) {
     if (!work.abstract?.trim()) {
       return Response.json({ error: "Crossref tidak menyediakan abstrak untuk karya ini." }, { status: 422, headers: noStore });
     }
-    const result = await summarizeWork(work.title[0] ?? null, work.abstract, getLlmClient());
+    const result = await summarizeWork(work.title[0] ?? null, work.abstract, getLlmClient(), skill);
     return Response.json(result, { headers: noStore });
   } catch (error) {
     const message = error instanceof LlmResponseError

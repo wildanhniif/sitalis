@@ -1,4 +1,5 @@
 "use client";
+import { getStoredSkill } from "@/lib/llm/skill";
 
 import * as Tabs from "@radix-ui/react-tabs";
 import { ArrowRight, CheckCircle2, Clock3, FileText, FlaskConical, History, Loader2, ShieldCheck, UploadCloud } from "lucide-react";
@@ -81,7 +82,7 @@ export function CheckWorkspace() {
     if (!clean.length || clean.some((item) => item.length < 15)) { setError("Lengkapi referensi; setiap entri minimal 15 karakter."); return; }
     setBusy(true); setError(""); setStage("checking"); setProgress({ done: 0, total: clean.length });
     try {
-      const response = await fetch("/api/check", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ references: clean, title, source }) });
+      const response = await fetch("/api/check", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ references: clean, title, source, skill: getStoredSkill() }) });
       if (!response.ok) { const data = await response.json(); throw new Error(data.error); }
       if (!response.body) throw new Error("Browser tidak menerima aliran progres.");
       const reader = response.body.getReader(); const decoder = new TextDecoder(); let buffer = "";

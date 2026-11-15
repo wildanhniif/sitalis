@@ -1,3 +1,4 @@
+import { SkillEditor } from "@/components/skill-editor";
 import { Check, FlaskConical, KeyRound, Minus, Server, Settings2 } from "lucide-react";
 import Link from "next/link";
 import { ConnectionSettings } from "@/components/connection-settings";
@@ -32,6 +33,7 @@ export default function SettingsPage() {
       </div>
 
       <div className="mt-8 space-y-6">
+        <SkillEditor />
         <section className="card p-5 sm:p-6">
           <div className="flex items-center gap-2 border-b border-border/60 pb-3">
             <Server className="size-4 text-muted-foreground" />

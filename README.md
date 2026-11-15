@@ -64,6 +64,14 @@ Selalu verifikasi base URL, model, harga, dan dukungan `response_format` di doku
 
 Halaman **Pengaturan** menyediakan tombol **Uji koneksi LLM** dan **Uji koneksi Crossref**. Pengaturan dibaca saat server berjalan; restart setelah mengubah `.env`.
 
+## Skill Agen
+
+Buka **Pengaturan → Skill Agen** untuk mengubah instruksi bebas parser referensi, pembanding karya, dan penulis ringkasan abstrak. Isi textarea per peran lalu tekan **Simpan Skill**. Profil disimpan di localStorage browser dan dikirim bersama permintaan pemeriksaan atau ringkasan berikutnya, tanpa menyimpan konfigurasi global di server. Tab/browser lain memiliki penyimpanan masing-masing.
+
+Status **Default** atau **Kustom** menunjukkan profil tersimpan yang aktif. Teks kosong memakai instruksi default per peran. Tombol **Kembalikan ke Default** menghapus profil tersimpan. Maksimal 5000 karakter per peran; perubahan yang belum disimpan belum berlaku.
+
+Kontrak JSON, nama key, dan nilai source_type yang diizinkan dikunci sistem dan selalu disisipkan setelah instruksi bebas. Validasi zod, retry, dan fallback Tidak terverifikasi tetap berlaku. Penguncian kontrak tidak menjamin LLM selalu patuh; keluaran tetap divalidasi. Skill dapat memengaruhi hasil evaluasi, sehingga catat profil yang digunakan saat membandingkan hasil penelitian. CLI menggunakan skill default dan mode demo tidak terpengaruh.
+
 ## Alur pemeriksaan
 
 1. **Ekstraksi** dilakukan lokal di route handler Node. PDF memakai `unpdf`; DOCX memakai `mammoth`. Bagian Daftar Pustaka/References terakhir diambil sampai Lampiran atau akhir dokumen.

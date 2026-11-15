@@ -1,3 +1,4 @@
+import { skillSchema } from "@/lib/llm/skill";
 import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import { getCrossrefClient } from "@/lib/crossref/client";
@@ -10,6 +11,7 @@ export const runtime = "nodejs";
 export const maxDuration = 300;
 
 const inputSchema = z.object({
+  skill: skillSchema.nullish(),
   references: z.array(z.string().trim().min(15).max(30_000)).min(1).max(200),
   title: z.string().trim().max(200).default("Pemeriksaan referensi"),
   source: z.enum(["upload", "paste"]).default("paste"),
@@ -37,7 +39,7 @@ export async function POST(request: Request) {
         for (let index = 0; index < input.references.length; index++) {
           let result: CheckResult;
           try {
-            result = await checkReference(input.references[index], { crossref: getCrossrefClient(), llm: getLlmClient() });
+            result = await checkReference(input.references[index], { crossref: getCrossrefClient(), llm: getLlmClient(), skill: input.skill ?? undefined });
           } catch (error) {
             result = { id: randomUUID(), referenceText: input.references[index], parsed: null, label: "unverified", reason: "Pemeriksaan terhenti karena layanan tidak tersedia.", evidence: error instanceof Error ? error.message : "Kesalahan layanan.", candidates: [], bestCandidate: null, comparatorUsed: false, elapsedMs: 0, tokens: 0 };
           }
