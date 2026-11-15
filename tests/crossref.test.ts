@@ -20,7 +20,7 @@ function response(body: unknown, status = 200, headers = new Headers()) {
 }
 
 async function setup(fetcher: typeof fetch) {
-  const cache = new CrossrefCache(await mkdtemp(path.join(tmpdir(), "ceksitasi-")));
+  const cache = new CrossrefCache(await mkdtemp(path.join(tmpdir(), "sitalis-")));
   return new CrossrefClient({ email: "test@example.com", fetcher, cache, sleep: vi.fn() });
 }
 
@@ -47,6 +47,28 @@ describe("CrossrefClient", () => {
     expect(url.searchParams.get("mailto")).toBe("test@example.com");
   });
 
+  it("keeps usable candidates when some records lack metadata", async () => {
+    const fetcher = vi.fn().mockResolvedValue(response({
+      message: {
+        items: [
+          { DOI: "10.5555/grant-1", issued: { "date-parts": [[2025]] }, type: "grant" },
+          { ...work, DOI: "10.1234/no-year", issued: { "date-parts": [[null]] } },
+          { ...work, DOI: "10.1234/broken", author: "not-an-array" },
+          work,
+        ],
+      },
+    }));
+    const client = await setup(fetcher);
+    const items = await client.search("Santoso, A valid title, 2023");
+    expect(items.map((item) => item.DOI)).toEqual(["10.5555/grant-1", "10.1234/no-year", "10.1234/example"]);
+  });
+
+  it("accepts a DOI record whose year cannot be parsed", async () => {
+    const fetcher = vi.fn().mockResolvedValue(response({ message: { ...work, issued: { "date-parts": [[null]] } } }));
+    const client = await setup(fetcher);
+    expect((await client.getByDoi("10.1234/example"))?.issued?.["date-parts"]?.[0]?.[0]).toBeNull();
+  });
+
   it("returns null for a missing DOI and reads another agency", async () => {
     const fetcher = vi.fn()
       .mockResolvedValueOnce(response({}, 404))
@@ -61,7 +83,7 @@ describe("CrossrefClient", () => {
       .mockResolvedValueOnce(response({}, 429))
       .mockResolvedValueOnce(response({ message: work }));
     const sleep = vi.fn();
-    const cache = new CrossrefCache(await mkdtemp(path.join(tmpdir(), "ceksitasi-")));
+    const cache = new CrossrefCache(await mkdtemp(path.join(tmpdir(), "sitalis-")));
     const client = new CrossrefClient({ email: "test@example.com", fetcher, cache, sleep });
     expect(await client.getByDoi("10.1234/example")).toEqual(work);
     expect(sleep).toHaveBeenCalledWith(500);

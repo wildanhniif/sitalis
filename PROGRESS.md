@@ -11,6 +11,9 @@
 - [x] M9 — Segmentasi referensi cerdas: pembersihan otomatis tabel Word/header/kolom status tanpa token LLM, serta fallback pemisahan via LLM (`src/lib/llm/segmenter.ts` + `/api/segment`) bila teks menempel/tidak terstruktur (41 test, lint, typecheck, production build lulus)
 
 ## Catatan
+- [x] M10 — Perbandingan benchmark antar-model LLM: metadata run pada metrics.json (model, host, dataset, jumlah entri per label, % pembanding), halaman /benchmark dengan impor metrics.json, tabel perbandingan berdampingan dengan sorotan nilai terbaik, hapus run, dan run data contoh bertanda jelas (47 test, lint, typecheck, production build lulus)
+
+## Catatan
 2026-10-25: Workspace awal hanya berisi dokumen penelitian pengguna. Node 24, npm 12, dan Git tersedia; repository Git belum diinisialisasi.
 
 2026-10-25: Audit viewport 360 px memastikan tidak ada overflow horizontal; demo, detail bukti, koreksi label, pemisahan referensi, serta ekstraksi PDF/DOCX diuji secara manual. Audit dependency penuh dan produksi melaporkan 0 kerentanan. Pemeriksaan langsung dengan kredensial LLM/Crossref belum dilakukan karena API key tidak tersedia.

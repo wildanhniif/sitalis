@@ -1,0 +1,61 @@
+id,reference_text,true_label,source_type
+1,"Mnih, V., Kavukcuoglu, K., Silver, D., et al. (2015). Human-level control through deep reinforcement learning. Nature, 518(7540), 529-533. https://doi.org/10.1038/nature14236",valid,journal
+2,"LeCun, Y., Bengio, Y., & Hinton, G. (2015). Deep learning. Nature, 521(7553), 436-444. https://doi.org/10.1038/nature14539",valid,journal
+3,"Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, L., & Polosukhin, I. (2017). Attention is all you need. Advances in Neural Information Processing Systems, 30, 5998-6008.",valid,conference
+4,"Devlin, J., Chang, M. W., Lee, K., & Toutanova, K. (2019). BERT: Pre-training of deep bidirectional transformers for language understanding. Proceedings of NAACL-HLT, 4171-4186.",valid,conference
+5,"Silver, D., Huang, A., Maddison, C. J., et al. (2016). Mastering the game of Go with deep neural networks and tree search. Nature, 529(7587), 484-489. https://doi.org/10.1038/nature16961",valid,journal
+6,"Goodfellow, I., Pouget-Abadie, J., Mirza, M., Xu, B., Warde-Farley, D., Ozair, S., Courville, A., & Bengio, Y. (2014). Generative adversarial nets. Advances in Neural Information Processing Systems, 27, 2672-2680.",valid,conference
+7,"He, K., Zhang, X., Ren, S., & Sun, J. (2016). Deep residual learning for image recognition. Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, 770-778. https://doi.org/10.1109/CVPR.2016.90",valid,conference
+8,"Hochreiter, S., & Schmidhuber, J. (1997). Long short-term memory. Neural Computation, 9(8), 1735-1780. https://doi.org/10.1162/neco.1997.9.8.1735",valid,journal
+9,"Shannon, C. E. (1948). A mathematical theory of communication. Bell System Technical Journal, 27(3), 379-423. https://doi.org/10.1002/j.1538-7305.1948.tb01338.x",valid,journal
+10,"Turing, A. M. (1950). Computing machinery and intelligence. Mind, 59(236), 433-460. https://doi.org/10.1093/mind/LIX.236.433",valid,journal
+11,"Rumelhart, D. E., Hinton, G. E., & Williams, R. J. (1986). Learning representations by back-propagating errors. Nature, 323(6088), 533-536. https://doi.org/10.1038/323533a0",valid,journal
+12,"Krizhevsky, A., Sutskever, I., & Hinton, G. E. (2012). ImageNet classification with deep convolutional neural networks. Advances in Neural Information Processing Systems, 25, 1097-1105.",valid,conference
+13,"Bojanowski, P., Grave, E., Joulin, A., & Mikolov, T. (2017). Enriching word vectors with subword information. Transactions of the Association for Computational Linguistics, 5, 135-146. https://doi.org/10.1162/tacl_a_00051",valid,journal
+14,"Radford, A., Narasimhan, K., Salimans, T., & Sutskever, I. (2018). Improving language understanding by generative pre-training. OpenAI Preprint.",valid,report
+15,"Raffel, C., Shazeer, N., Roberts, A., et al. (2020). Exploring the limits of transfer learning with a unified text-to-text transformer. Journal of Machine Learning Research, 21(140), 1-67.",valid,journal
+16,"Mnih, V., Kavukcuoglu, K., & Silver, D. (2014). Human-level control through deep reinforcement learning. Nature, 518(7540), 529-533. https://doi.org/10.1038/nature14236",partial,journal
+17,"LeCun, Y., Bengio, Y., & Hinton, G. (2015). Deep learning. IEEE Transactions on Neural Networks, 521(7553), 436-444. https://doi.org/10.1038/nature14539",partial,journal
+18,"He, K., Zhang, X., Ren, S., & Sun, J. (2015). Deep residual learning for image recognition. Proceedings of CVPR, 770-778.",partial,conference
+19,"Goodfellow, I., Mirza, M., & Bengio, Y. (2015). Generative adversarial networks for image synthesis. Advances in Neural Information Processing Systems, 27, 2672-2680.",partial,conference
+20,"Hochreiter, S., & Schmidhuber, J. (1998). Long short-term memory recurrent networks. Neural Computation, 9(8), 1735-1780. https://doi.org/10.1162/neco.1997.9.8.1735",partial,journal
+21,"Silver, D., Huang, A., & Hassabis, D. (2015). Mastering Go using deep reinforcement learning. Nature, 529, 484-489. https://doi.org/10.1038/nature16961",partial,journal
+22,"Devlin, J., & Chang, M. W. (2018). BERT: Pre-training deep transformers for language understanding. Proceedings of NAACL, 4171-4186.",partial,conference
+23,"Vaswani, A., & Parmar, N. (2018). Attention mechanisms in deep neural networks. Neural Information Processing Systems, 30, 5998-6008.",partial,conference
+24,"Shannon, C. E. (1949). A mathematical theory of digital communication. Bell System Technical Journal, 27(3), 379-423. https://doi.org/10.1002/j.1538-7305.1948.tb01338.x",partial,journal
+25,"Turing, A. M. (1951). Computing machinery and machine intelligence. Mind, 59(236), 433-460. https://doi.org/10.1093/mind/LIX.236.433",partial,journal
+26,"Rumelhart, D. E., & Hinton, G. E. (1987). Back-propagating errors in multilayer networks. Nature, 323, 533-536. https://doi.org/10.1038/323533a0",partial,journal
+27,"Krizhevsky, A., & Hinton, G. E. (2011). ImageNet classification using deep CNN. Advances in Neural Information Processing Systems, 25, 1097-1105.",partial,conference
+28,"Raffel, C., & Shazeer, N. (2019). Unified transfer learning with text-to-text transformer. Journal of Machine Learning Research, 21, 1-67.",partial,journal
+29,"Bojanowski, P., & Mikolov, T. (2016). Subword representations for word vectors. Transactions of the ACL, 5, 135-146. https://doi.org/10.1162/tacl_a_00051",partial,journal
+30,"Radford, A., & Sutskever, I. (2019). Improving language models with generative pre-training. OpenAI Technical Journal, 1, 1-12.",partial,report
+31,"Ramadhan, F. (2023). Self-healing neural networks for autonomous citation repair. International Journal of Synthetic Intelligence, 9(2), 41-59.",suspected,journal
+32,"Putri, N. (2024). Quantum transformers for deterministic bibliography generation. Journal of Imaginary Machine Learning, 12(1), 1-20.",suspected,journal
+33,"Santoso, R. (2022). Blockchain-based semantic memory for self-citing manuscripts. International Conference on Nonexistent Computing, 88-97.",suspected,conference
+34,"Wijaya, T. (2025). Recursive citation validation using invisible language models. Journal of Hallucinated Studies, 3(4), 100-115.",suspected,journal
+35,"Kusuma, D. (2024). Autonomous bibliographic hallucination detection with synthetic DOI graphs. Journal of Fictional Informatics, 7(1), 10-29.",suspected,journal
+36,"Pratama, H. (2023). Zero-shot neural citation synthesis with counterfactual graph reasoning. Transactions on Hallucinated AI, 15(3), 112-128.",suspected,journal
+37,"Lestari, A. M. (2024). Hallucination dynamics in large scientific foundation models. IEEE Transactions on Imaginary Computation, 4(2), 200-215.",suspected,journal
+38,"Wibowo, K., & Gunawan, E. (2023). Differential entropy in phantom scholarly citation networks. Journal of Synthetic Meta-Science, 8(1), 50-68.",suspected,journal
+39,"Siregar, M. (2025). Multi-agent citation consensus via simulated peer review. Proceedings of the Global Conference on Artificial Citation, 301-310.",suspected,conference
+40,"Hidayat, S., & Nugroho, B. (2024). Deep spectral clustering for non-existent paper detection. International Journal of Neural Fabrication, 11(4), 85-99.",suspected,journal
+41,"Anwar, C. (2022). Latent Dirichlet attribution for hallucinated scholarly artifacts. ACM Symposium on Synthetic Science, 45-56.",suspected,conference
+42,"Rahmawati, D. (2023). Topological manifold learning of fabricated academic corpora. Journal of Mathematical Hallucinations, 5(2), 12-29.",suspected,journal
+43,"Setiawan, B. (2024). Automated peer fabrication: Generative models for synthetic citations. Nature Synthetic Intelligence, 2, 45-52.",suspected,journal
+44,"Firmansyah, A. (2025). Probabilistic graph alignment for imaginary bibliographies. International Journal of Cognitive Fabrications, 18(1), 77-91.",suspected,journal
+45,"Saputra, Y. (2023). Neural hallucination mitigation in automated thesis drafting. Journal of Artificial Academic Writing, 6(3), 140-155.",suspected,journal
+46,"Kementerian Pendidikan dan Kebudayaan. (2020). Panduan penyusunan kurikulum pendidikan tinggi di era industri 4.0. Jakarta: Direktorat Jenderal Pendidikan Tinggi.",unverified,report
+47,"Republik Indonesia. (2003). Undang-Undang Republik Indonesia Nomor 20 Tahun 2003 tentang Sistem Pendidikan Nasional. Lembaran Negara RI Tahun 2003 Nomor 78.",unverified,regulation
+48,"Republik Indonesia. (2012). Undang-Undang Republik Indonesia Nomor 12 Tahun 2012 tentang Pendidikan Tinggi. Lembaran Negara RI Tahun 2012 Nomor 158.",unverified,regulation
+49,"Pressman, R. S., & Maxim, B. R. (2020). Software Engineering: A Practitioner's Approach (9th ed.). New York: McGraw-Hill Education.",unverified,book
+50,"Sommerville, I. (2016). Software Engineering (10th ed.). Boston: Pearson Education.",unverified,book
+51,"Denzin, N. K., & Lincoln, Y. S. (2018). The SAGE Handbook of Qualitative Research (5th ed.). Thousand Oaks: SAGE Publications.",unverified,book
+52,"Sugiyono. (2019). Metode Penelitian Kuantitatif, Kualitatif, dan R&D. Bandung: Alfabeta.",unverified,book
+53,"Santoso, A. (2021). Analisis faktor penerimaan sistem informasi akademik menggunakan UTAUT2. Tesis magister, Universitas Gadjah Mada, Yogyakarta.",unverified,thesis
+54,"Hidayat, R. (2022). Rancang bangun sistem deteksi plagiarisme naskah ilmiah berbasis string matching. Skripsi sarjana, Institut Teknologi Bandung, Bandung.",unverified,thesis
+55,"Wulandari, S. (2020). Klasifikasi sentimen ulasan produk menggunakan algoritma Support Vector Machine. Tugas Akhir sarjana, Universitas Indonesia, Depok.",unverified,thesis
+56,"OpenAI. (2023). GPT-4 Technical Report. arXiv preprint arXiv:2303.08774.",unverified,report
+57,"Google. (2024). Google Scholar Search Engine. https://scholar.google.com/",unverified,web
+58,"Kementerian Riset dan Teknologi / BRIN. (2020). Panduan Pengusulan Hibah Penelitian dan Pengabdian kepada Masyarakat Edisi XIII. Jakarta: Kemenristek/BRIN.",unverified,report
+59,"Badan Standardisasi Nasional. (2011). SNI ISO/IEC 27001:2013 Sistem Manajemen Keamanan Informasi. Jakarta: BSN.",unverified,regulation
+60,"World Health Organization. (2021). Ethics and governance of artificial intelligence for health: WHO guidance. Geneva: World Health Organization.",unverified,report

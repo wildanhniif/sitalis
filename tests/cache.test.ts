@@ -6,7 +6,7 @@ import { CrossrefCache } from "@/lib/crossref/cache";
 
 describe("CrossrefCache", () => {
   it("persists values and honors expiry", async () => {
-    const directory = await mkdtemp(path.join(tmpdir(), "ceksitasi-cache-"));
+    const directory = await mkdtemp(path.join(tmpdir(), "sitalis-cache-"));
     const cache = new CrossrefCache(directory, 10_000);
     await cache.set("key", { value: 42 });
     cache.clearMemory();

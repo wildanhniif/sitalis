@@ -37,7 +37,16 @@ const predictions = [["id", "reference_text", "true_label", "predicted_label", "
   const result = results[index];
   return [input.id, input.reference_text, input.true_label, result.label, result.bestCandidate?.score.toFixed(4) ?? "", result.elapsedMs, result.tokens];
 })].map((row) => row.map(escapeCsv).join(",")).join("\r\n");
-const metrics = { generatedAt: new Date().toISOString(), ...calculateMetrics(inputs, results) };
+const metrics = {
+  generatedAt: new Date().toISOString(),
+  model: process.env.LLM_MODEL,
+  llmBaseUrl: process.env.LLM_BASE_URL,
+  datasetFile: path.basename(file),
+  labelCounts: Object.fromEntries(labels.map((label) => [label, inputs.filter((input) => input.true_label === label).length])) as Record<Label, number>,
+  comparatorUsedCount: results.filter((result) => result.comparatorUsed).length,
+  comparatorUsedPercentage: inputs.length ? (results.filter((result) => result.comparatorUsed).length / inputs.length) * 100 : 0,
+  ...calculateMetrics(inputs, results),
+};
 await writeFile(path.join(process.cwd(), "predictions.csv"), `\uFEFF${predictions}`, "utf8");
 await writeFile(path.join(process.cwd(), "metrics.json"), JSON.stringify(metrics, null, 2), "utf8");
 console.log(`Selesai. Macro-F1: ${metrics.macroF1.toFixed(4)}. Hasil: predictions.csv dan metrics.json`);

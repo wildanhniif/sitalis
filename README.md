@@ -117,7 +117,9 @@ npm run eval -- data/benchmark_60.csv
 Perintah membaca `.env`, menjalankan pipeline yang sama dengan aplikasi, lalu menulis (dan menimpa):
 
 - `predictions.csv`: label prediksi, skor, waktu, dan token per referensi.
-- `metrics.json`: precision/recall/F1 per label, macro-F1, confusion matrix, FPR, total dan rata-rata waktu/token.
+- `metrics.json`: precision/recall/F1 per label, macro-F1, confusion matrix, FPR, total dan rata-rata waktu/token, ditambah metadata run: nama model (`LLM_MODEL`), host base URL LLM, nama file dataset, jumlah entri per label, dan persentase entri yang memakai pembanding LLM.
+
+Hasil evaluasi dapat dibandingkan antar-model lewat halaman **/benchmark**: impor satu atau lebih file `metrics.json` (maksimal 10 run tersimpan di localStorage browser), lalu tabel perbandingan menampilkan model, dataset, macro-F1, F1 per label, rata-rata token, rata-rata waktu, dan persentase pemakaian pembanding, dengan nilai terbaik tiap metrik disorot. Halaman juga menyertakan satu baris **data contoh** yang jelas ditandai dan bukan hasil evaluasi nyata.
 
 FPR dihitung pada ground truth `valid`/`partial` tanpa pola DOI yang diprediksi sebagai `suspected`. Token bergantung pada field `usage.total_tokens` provider; nilainya 0 jika provider tidak memberikan usage. `data/sample.csv` berisi 20 contoh untuk menguji CLI, **bukan dataset benchmark yang telah divalidasi**. Jangan melaporkan metrik sampel sebagai hasil penelitian tanpa validasi ground truth.
 

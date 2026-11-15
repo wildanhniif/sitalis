@@ -6,7 +6,7 @@ import { RateQueue } from "./queue";
 
 const agencySchema = z.object({ message: z.object({ agency: z.object({ id: z.string(), label: z.string() }) }) });
 const workResponseSchema = z.object({ message: crossrefWorkSchema });
-const searchResponseSchema = z.object({ message: z.object({ items: z.array(crossrefWorkSchema) }) });
+const searchResponseSchema = z.object({ message: z.object({ items: z.array(z.unknown()) }) });
 
 export type Agency = z.infer<typeof agencySchema>["message"]["agency"];
 
@@ -86,7 +86,9 @@ export class CrossrefClient {
     const result = await this.searchQueue.run(() =>
       this.request(`/works?${query.toString()}`, searchResponseSchema),
     );
-    const items = result?.message.items ?? [];
+    const items = (result?.message.items ?? [])
+      .map((item) => crossrefWorkSchema.safeParse(item))
+      .flatMap((parsed) => (parsed.success ? [parsed.data] : []));
     await this.cache.set(key, items);
     return items;
   }
@@ -105,7 +107,7 @@ export class CrossrefClient {
         const response = await this.fetcher(url.toString(), {
           headers: {
             Accept: "application/json",
-            "User-Agent": `CekSitasi/1.0 (mailto:${this.options.email})`,
+            "User-Agent": `Sitalis/1.0 (mailto:${this.options.email})`,
           },
           signal: controller.signal,
         });

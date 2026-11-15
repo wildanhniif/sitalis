@@ -1,7 +1,7 @@
 "use client";
 import type { Report } from "./types";
 
-const key = "ceksitasi:reports";
+const key = "sitalis:reports";
 export function getBrowserReports(): Report[] {
   if (typeof window === "undefined") return [];
   try {

@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import { extractJson, LlmClient } from "@/lib/llm/client";
 import { extractDoi, parseReference } from "@/lib/llm/parser";
 import { maxSummaryTokens, summarizeWork } from "@/lib/llm/summary";
+import { segmentWithLlm } from "@/lib/llm/segmenter";
 
 const parsed = { authors: ["Santoso, Andi"], year: 2023, title: "A valid title", container: "Journal", volume: null, issue: null, pages: null, doi: null, url: null, source_type: "journal" };
 
@@ -42,6 +43,17 @@ describe("LLM adapter and parser", () => {
     expect(body.max_tokens).toBe(maxSummaryTokens);
     expect(body.messages[1].content).toContain("reliable citation testing");
     expect(body.messages[1].content).not.toContain("<jats:p>");
+  });
+
+  it("segmenter returns cleaned entries and counts tokens", async () => {
+    const fetcher = vi.fn().mockResolvedValue(responseFor(JSON.stringify({
+      references: ["  Hochreiter, S. (1997).  Long short-term memory.  Neural Computation, 9(8), 1735-1780. 10.1162/neco.1997.9.8.1735 ", "terlalu pendek"],
+    }), 33));
+    const llm = new LlmClient({ baseUrl: "https://llm.test/v1", apiKey: "k", model: "model", fetcher });
+    const result = await segmentWithLlm("No Format Status\n1 Hochreiter...", llm);
+    expect(result.tokens).toBe(33);
+    expect(result.references).toEqual(["Hochreiter, S. (1997). Long short-term memory. Neural Computation, 9(8), 1735-1780. 10.1162/neco.1997.9.8.1735"]);
+    expect(JSON.parse(fetcher.mock.calls[0][1].body).messages[0].content).toContain("verbatim");
   });
 });
 

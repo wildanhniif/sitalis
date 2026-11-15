@@ -6,6 +6,7 @@ import { isWrongDoi, rankCandidates } from "@/lib/matching/matcher";
 import { matchingConfig } from "@/lib/config";
 import type { Candidate, CheckResult, CrossrefWork } from "@/lib/types";
 import { foundLabel, notFoundLabel } from "./label";
+import { detectIndonesianSource } from "./indonesian-sources";
 
 type Dependencies = { crossref: CrossrefClient; llm: LlmClient };
 
@@ -37,7 +38,14 @@ export async function checkReference(referenceText: string, dependencies: Depend
     } else {
       const agency = await dependencies.crossref.getAgency(entry.doi);
       if (agency && agency.id.toLowerCase() !== "crossref") {
-        return finish({ ...base, parsed: entry, label: "unverified", reason: `DOI terdaftar di ${agency.label}, di luar cakupan pemeriksaan Crossref.`, evidence: `Agency DOI: ${agency.label} (${agency.id}).`, candidates: [], bestCandidate: null });
+        const indoMatch = detectIndonesianSource({
+          referenceText,
+          title: entry.title,
+          container: entry.container,
+          url: entry.url,
+          sourceType: entry.source_type,
+        });
+        return finish({ ...base, indonesianSource: indoMatch.isIndonesian ? indoMatch : undefined, parsed: entry, label: "unverified", reason: `DOI terdaftar di ${agency.label}, di luar cakupan pemeriksaan Crossref.`, evidence: `Agency DOI: ${agency.label} (${agency.id}).`, candidates: [], bestCandidate: null });
       }
       unregisteredDoi = true;
       evidence = `DOI ${entry.doi} tidak ditemukan di Crossref maupun agency DOI. `;
@@ -67,6 +75,27 @@ export async function checkReference(referenceText: string, dependencies: Depend
     return finish({ ...base, parsed: entry, label, reason: label === "valid" ? "Karya ditemukan dan metadata yang tersedia cocok." : "Karya ditemukan, tetapi satu atau lebih metadata berbeda.", evidence: `${evidence}Kandidat Crossref ${best.work.DOI} dengan skor ${best.score.toFixed(2)}.`, candidates, bestCandidate: best, comparatorUsed: ambiguous });
   }
 
+  const indoMatch = detectIndonesianSource({
+    referenceText,
+    title: entry.title,
+    container: entry.container,
+    url: entry.url,
+    sourceType: entry.source_type,
+  });
+
+  const baseWithIndo = {
+    ...base,
+    indonesianSource: indoMatch.isIndonesian ? indoMatch : undefined,
+  };
+
   const label = notFoundLabel(entry.source_type, unregisteredDoi);
-  return finish({ ...base, parsed: entry, label, reason: label === "suspected" ? "Tidak ditemukan karya yang cukup cocok di Crossref. Ini dugaan, bukan bukti halusinasi." : "Tidak ditemukan di Crossref; jenis sumber ini memang tidak selalu terindeks.", evidence: `${evidence}${best ? `Skor kandidat terbaik ${best.score.toFixed(2)}.` : "Crossref tidak mengembalikan kandidat."}`, candidates, bestCandidate: best, comparatorUsed: ambiguous });
+  let reason = label === "suspected"
+    ? "Tidak ditemukan karya yang cukup cocok di Crossref. Ini dugaan, bukan bukti halusinasi."
+    : "Tidak ditemukan di Crossref; jenis sumber ini memang tidak selalu terindeks.";
+
+  if (indoMatch.isIndonesian && label === "unverified" && indoMatch.notes) {
+    reason = `${reason} ${indoMatch.notes}`;
+  }
+
+  return finish({ ...baseWithIndo, parsed: entry, label, reason, evidence: `${evidence}${best ? `Skor kandidat terbaik ${best.score.toFixed(2)}.` : "Crossref tidak mengembalikan kandidat."}`, candidates, bestCandidate: best, comparatorUsed: ambiguous });
 }

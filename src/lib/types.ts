@@ -30,7 +30,9 @@ export const crossrefWorkSchema = z.object({
   author: z
     .array(z.object({ family: z.string().optional(), given: z.string().optional() }))
     .default([]),
-  issued: z.object({ "date-parts": z.array(z.array(z.number())).default([]) }).optional(),
+  issued: z
+    .object({ "date-parts": z.array(z.array(z.number().nullable())).default([]) })
+    .optional(),
   "container-title": z.array(z.string()).default([]),
   type: z.string().default("other"),
   volume: z.string().optional(),
@@ -75,6 +77,13 @@ export type CheckResult = {
   manualLabel?: Label;
   confirmed?: boolean;
   aiSummary?: { text: string; tokens: number; doi: string };
+  indonesianSource?: {
+    isIndonesian: boolean;
+    platform?: "garuda" | "sinta" | "neliti" | "repository" | "peraturan" | "other";
+    platformName?: string;
+    searchUrl?: string;
+    notes?: string;
+  };
   elapsedMs: number;
   tokens: number;
 };

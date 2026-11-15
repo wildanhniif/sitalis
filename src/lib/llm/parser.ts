@@ -38,8 +38,16 @@ export async function compareWorks(entry: ParsedReference, candidate: unknown, l
 }
 
 export async function testLlm(llm: LlmClient) {
-  const schema = z.object({ status: z.literal("ok") });
-  const result = await llm.chat("Return JSON only: {\"status\":\"ok\"}", "Connection test", schema);
+  const schema = z.object({
+    status: z.string().transform((val) => val.replace(/^[#\s]+/, "").toLowerCase()),
+  }).refine((data) => data.status === "ok", {
+    message: "Field status harus bernilai 'ok'",
+  });
+  const result = await llm.chat(
+    "You are a connection test assistant. Output valid JSON only: {\"status\": \"ok\"}. Do not include markdown, comments, or extra symbols.",
+    "ping",
+    schema
+  );
   return result.data;
 }
 
