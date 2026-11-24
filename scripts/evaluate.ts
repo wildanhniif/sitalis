@@ -5,6 +5,7 @@ import { z } from "zod";
 import { getCrossrefClient } from "../src/lib/crossref/client";
 import { parseCsv, escapeCsv } from "../src/lib/csv";
 import { calculateMetrics, type EvaluationInput } from "../src/lib/evaluation";
+import { getEffectiveConfig } from "../src/lib/runtime-config";
 import { getLlmClient } from "../src/lib/llm/client";
 import { checkReference } from "../src/lib/pipeline/check";
 import { labels, type CheckResult, type Label } from "../src/lib/types";
@@ -16,8 +17,9 @@ if (!file) {
   console.error("Penggunaan: npm run eval -- data/test.csv");
   process.exit(1);
 }
-if (!process.env.CROSSREF_MAILTO || !process.env.LLM_BASE_URL || !process.env.LLM_MODEL) {
-  console.error("Isi CROSSREF_MAILTO, LLM_BASE_URL, LLM_MODEL, dan LLM_API_KEY sebelum evaluasi.");
+const effectiveConfig = getEffectiveConfig();
+if (!effectiveConfig.crossrefMailto || !effectiveConfig.llmBaseUrl || !effectiveConfig.llmModel) {
+  console.error("Isi CROSSREF_MAILTO, LLM_BASE_URL, LLM_MODEL, dan LLM_API_KEY (di .env atau Pengaturan) sebelum evaluasi.");
   process.exit(1);
 }
 
@@ -39,8 +41,8 @@ const predictions = [["id", "reference_text", "true_label", "predicted_label", "
 })].map((row) => row.map(escapeCsv).join(",")).join("\r\n");
 const metrics = {
   generatedAt: new Date().toISOString(),
-  model: process.env.LLM_MODEL,
-  llmBaseUrl: process.env.LLM_BASE_URL,
+  model: effectiveConfig.llmModel,
+  llmBaseUrl: effectiveConfig.llmBaseUrl,
   datasetFile: path.basename(file),
   labelCounts: Object.fromEntries(labels.map((label) => [label, inputs.filter((input) => input.true_label === label).length])) as Record<Label, number>,
   comparatorUsedCount: results.filter((result) => result.comparatorUsed).length,

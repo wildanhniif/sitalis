@@ -1,4 +1,3 @@
-"use client";
 import { z } from "zod";
 import type { Label } from "./types";
 
@@ -28,37 +27,12 @@ export const benchmarkRunSchema = z.object({
 
 export type BenchmarkRun = z.infer<typeof benchmarkRunSchema> & { id: string; importedAt: string; isDemo: boolean };
 
-const storageKey = "sitalis:benchmark-runs";
-export const maxBenchmarkRuns = 10;
-
-const id = () => (crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`);
 
 /** Memvalidasi dan menormalkan isi metrics.json menjadi run benchmark. Field metadata lama yang absen diisi nilai default. */
 export function parseMetricsJson(text: string): Omit<BenchmarkRun, "id" | "importedAt" | "isDemo"> {
   return benchmarkRunSchema.parse(JSON.parse(text));
 }
 
-export function getBenchmarkRuns(): BenchmarkRun[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const runs = JSON.parse(localStorage.getItem(storageKey) ?? "[]") as BenchmarkRun[];
-    return Array.isArray(runs) ? runs : [];
-  } catch { return []; }
-}
-
-/** Menyimpan run baru di urutan teratas, maksimal 10 run, mengikuti pola browser-reports. */
-export function saveBenchmarkRun(run: Omit<BenchmarkRun, "id" | "importedAt" | "isDemo">): BenchmarkRun[] {
-  const runs = getBenchmarkRuns();
-  const candidate: BenchmarkRun = { ...run, id: id(), importedAt: new Date().toISOString(), isDemo: false };
-  try { localStorage.setItem(storageKey, JSON.stringify([candidate, ...runs].slice(0, maxBenchmarkRuns))); } catch { return runs; }
-  return [candidate, ...runs].slice(0, maxBenchmarkRuns);
-}
-
-export function removeBenchmarkRun(runId: string): BenchmarkRun[] {
-  const runs = getBenchmarkRuns().filter((run) => run.id !== runId);
-  try { localStorage.setItem(storageKey, JSON.stringify(runs)); } catch { /* abaikan */ }
-  return runs;
-}
 
 /** Metrik utama yang disorot pada tabel perbandingan beserta arah terbaiknya. */
 export const comparisonMetrics = [

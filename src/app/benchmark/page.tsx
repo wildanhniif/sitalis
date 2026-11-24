@@ -1,7 +1,7 @@
 import { Award, BarChart3, CheckCircle2, Clock, FileSpreadsheet, ShieldAlert } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { BenchmarkComparison } from "@/components/benchmark-comparison";
+import { BenchmarkLeaderboard } from "@/components/benchmark-leaderboard";
 
 export const metadata = {
   title: "Hasil Benchmark Empiris (60 Entri)",
@@ -85,7 +85,7 @@ export default function BenchmarkPage() {
       </section>
 
       <div className="page-container max-w-5xl py-10 space-y-10">
-        <BenchmarkComparison />
+        <BenchmarkLeaderboard />
 
         {/* Metrik Utama 4 Kotak */}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
