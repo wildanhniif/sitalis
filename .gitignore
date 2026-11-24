@@ -3,6 +3,7 @@ node_modules/
 out/
 .env
 .env.local
+data/runtime-config.json
 .cache/
 coverage/
 predictions.csv

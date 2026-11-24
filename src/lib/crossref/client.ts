@@ -1,3 +1,4 @@
+import { getEffectiveConfig } from "@/lib/runtime-config";
 import { z } from "zod";
 import { appConfig } from "@/lib/config";
 import { crossrefWorkSchema, type CrossrefWork } from "@/lib/types";
@@ -143,7 +144,12 @@ export class CrossrefClient {
 }
 
 let sharedClient: CrossrefClient | null = null;
+let sharedEmail: string | null = null;
 export function getCrossrefClient() {
-  if (!sharedClient) sharedClient = new CrossrefClient({ email: process.env.CROSSREF_MAILTO ?? "" });
+  const email = getEffectiveConfig().crossrefMailto;
+  if (!sharedClient || sharedEmail !== email) {
+    sharedClient = new CrossrefClient({ email });
+    sharedEmail = email;
+  }
   return sharedClient;
 }

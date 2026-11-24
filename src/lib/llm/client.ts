@@ -1,3 +1,4 @@
+import { getEffectiveConfig } from "@/lib/runtime-config";
 import { z } from "zod";
 
 export type ChatResponse = { content: string; tokens: number };
@@ -31,9 +32,11 @@ export function extractJson(text: string): unknown {
 
 export class LlmClient {
   private fetcher: typeof fetch;
+  readonly configKey: string;
 
   constructor(private options: LlmOptions) {
     this.fetcher = options.fetcher ?? fetch;
+    this.configKey = `${options.baseUrl}|${options.apiKey}|${options.model}`;
   }
 
   async chat(system: string, user: string, schema: z.ZodType, jsonMode = true, maxTokens?: number): Promise<{ data: unknown; tokens: number }> {
@@ -73,11 +76,12 @@ export class LlmClient {
 
 let shared: LlmClient | null = null;
 export function getLlmClient() {
-  if (!shared) {
+  const config = getEffectiveConfig();
+  if (!shared || shared.configKey !== `${config.llmBaseUrl}|${config.llmApiKey}|${config.llmModel}`) {
     shared = new LlmClient({
-      baseUrl: process.env.LLM_BASE_URL ?? "",
-      apiKey: process.env.LLM_API_KEY ?? "",
-      model: process.env.LLM_MODEL ?? "",
+      baseUrl: config.llmBaseUrl,
+      apiKey: config.llmApiKey,
+      model: config.llmModel,
     });
   }
   return shared;
