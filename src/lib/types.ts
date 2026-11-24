@@ -7,6 +7,7 @@ export const sourceTypes = [
   "thesis",
   "report",
   "regulation",
+  "preprint",
   "web",
   "other",
 ] as const;

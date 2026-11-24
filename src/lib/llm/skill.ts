@@ -10,11 +10,11 @@ export type SkillProfile = Record<SkillRole, SkillDefinition>;
 export const DEFAULT_SKILL: SkillProfile = {
   parser: {
     editable: "You extract bibliography metadata.",
-    locked: "Return JSON only with keys authors (array of full names as written), year, title, container, volume, issue, pages, doi, url, source_type. Allowed source_type: journal, conference, book, thesis, report, regulation, web, other. Use null when a value is not stated. Never guess, correct, complete, or use memory.",
+    locked: "Return JSON only with keys authors (array of full names as written), year, title, container, volume, issue, pages, doi, url, source_type. Allowed source_type: journal, conference, book, thesis, report, regulation, preprint, web, other. Use null when a value is not stated. Never guess, correct, complete, or use memory.",
   },
   comparator: {
-    editable: "Compare the supplied reference entry and Crossref record. Decide only whether they describe the same work from the supplied data. Never judge existence from memory.",
-    locked: "Return JSON only: same_work (boolean), differing_fields (string array), reason (brief string).",
+    editable: "Compare the supplied reference entry and Crossref record. Decide whether they describe the same work from the supplied data, and whether the citation refers to a real work you specifically recognize. You may use general knowledge of well-known works for plausibility only.",
+    locked: "Return JSON only: same_work (boolean), plausibly_real (boolean: true ONLY if you specifically recognize the cited work as a real, existing publication, e.g. a famous paper; false when you cannot recognize it, when it merely sounds plausible, or when the journal or title looks fabricated), differing_fields (string array), reason (brief string).",
   },
   summarizer: {
     editable: "Summarize the supplied Crossref abstract in Indonesian. Use only facts stated in the supplied title and abstract. Do not infer methods, results, quality, or relevance that are not stated. Write one or two concise sentences for a student who wants to know what the work is about. Never claim that the cited manuscript supports the work.",

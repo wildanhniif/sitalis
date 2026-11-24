@@ -3,7 +3,7 @@ import { parsedReferenceSchema, type ParsedReference } from "@/lib/types";
 import { extractJson, LlmClient, LlmResponseError } from "./client";
 import { buildSkillPrompt, type StoredSkill } from "./skill";
 
-const comparatorSchema = z.object({ same_work: z.boolean(), differing_fields: z.array(z.string()), reason: z.string() });
+const comparatorSchema = z.object({ same_work: z.boolean(), plausibly_real: z.boolean().default(false), differing_fields: z.array(z.string()), reason: z.string() });
 
 export function extractDoi(text: string): string | null {
   const match = text.match(/10\.\d{4,9}\/[-._;()/:A-Z0-9]+/i);

@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { LabelBadge } from "./label-badge";
 
-const sourceNames = { journal: "Jurnal", conference: "Konferensi", book: "Buku", thesis: "Tesis", report: "Laporan", regulation: "Regulasi", web: "Web", other: "Lainnya" };
+const sourceNames = { journal: "Jurnal", conference: "Konferensi", book: "Buku", thesis: "Tesis", report: "Laporan", regulation: "Regulasi", preprint: "Preprint", web: "Web", other: "Lainnya" };
 
 function EntryMetadata({ result }: { result: CheckResult }) {
   const parsed = result.parsed;

@@ -1,7 +1,9 @@
 import type { Candidate, Label, SourceType } from "@/lib/types";
 
 export function foundLabel(candidate: Candidate): Label {
-  return candidate.differences.length ? "partial" : "valid";
+  // Perbedaan penulisan wadah (mis. singkatan nama prosiding) dianggap variasi normal,
+  // bukan indikasi metadata yang berbeda; partial hanya untuk perbedaan material.
+  return candidate.differences.some((difference) => difference.field !== "container") ? "partial" : "valid";
 }
 
 export function notFoundLabel(sourceType: SourceType, unregisteredDoi = false): Label {

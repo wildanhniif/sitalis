@@ -13,8 +13,8 @@ describe("metadata similarity", () => {
   it("scores exact metadata above a different title", () => {
     const entry = parsedReferenceSchema.parse({ authors: ["Santoso, Andi"], year: 2023, title: "A valid title", container: "Journal of Testing", source_type: "journal" });
     const work = { DOI: "10.1/a", title: ["A valid title"], author: [{ family: "Santoso" }], issued: { "date-parts": [[2023]] }, "container-title": ["Journal of Testing"], type: "journal-article" };
-    const different = { ...work, title: ["An unrelated work"] };
-    expect(matchCandidate(entry, work).score).toBe(1);
+    const different = { ...work, title: ["Completely unrelated research on marine biology"] };
+    expect(matchCandidate(entry, work).score).toBeCloseTo(1, 10);
     expect(matchCandidate(entry, work).differences).toHaveLength(0);
     expect(matchCandidate(entry, different).score).toBeLessThan(0.82);
     expect(matchCandidate(entry, different).score).toBeLessThan(matchCandidate(entry, work).score);

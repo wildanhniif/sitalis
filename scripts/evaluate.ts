@@ -3,6 +3,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { z } from "zod";
 import { getCrossrefClient } from "../src/lib/crossref/client";
+import { getOpenAlexClient } from "../src/lib/openalex/client";
 import { parseCsv, escapeCsv } from "../src/lib/csv";
 import { calculateMetrics, type EvaluationInput } from "../src/lib/evaluation";
 import { getEffectiveConfig } from "../src/lib/runtime-config";
@@ -33,7 +34,7 @@ const inputs: EvaluationInput[] = rows.slice(1).filter((row) => row.some(Boolean
 const results: CheckResult[] = [];
 for (let index = 0; index < inputs.length; index++) {
   console.log(`[${index + 1}/${inputs.length}] ${inputs[index].id}`);
-  results.push(await checkReference(inputs[index].reference_text, { crossref: getCrossrefClient(), llm: getLlmClient() }, inputs[index].id));
+  results.push(await checkReference(inputs[index].reference_text, { crossref: getCrossrefClient(), llm: getLlmClient(), openalex: getOpenAlexClient() }, inputs[index].id));
 }
 const predictions = [["id", "reference_text", "true_label", "predicted_label", "score", "elapsed_ms", "tokens"], ...inputs.map((input, index) => {
   const result = results[index];

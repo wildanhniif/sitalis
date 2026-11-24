@@ -17,8 +17,8 @@ Panduan langkah demi langkah dari instalasi sampai LLM dan Crossref berfungsi te
 - Unggah PDF/DOCX maksimal 10 MB atau tempel daftar pustaka.
 - Deteksi bagian Daftar Pustaka terakhir, pemisahan entri, dan editor sebelum pemeriksaan.
 - Parsing referensi menjadi JSON melalui LLM; hanya teks referensi yang dikirim, bukan naskah lengkap. Ringkasan abstrak opsional hanya mengirim abstrak karya dari Crossref saat tombol ditekan.
-- Pemeriksaan DOI, agency DOI, dan pencarian bibliografis penuh ke Crossref.
-- Skor kemiripan judul, penulis, tahun, dan wadah publikasi; pembanding LLM hanya untuk kandidat ambigu.
+- Pemeriksaan DOI, agency DOI, dan pencarian bibliografis penuh ke Crossref, dengan OpenAlex sebagai indeks pelengkap.
+- Skor kemiripan judul, penulis, tahun, dan wadah publikasi; pembanding LLM hanya untuk kandidat ambigu dan juga menilai apakah sitasi merujuk karya nyata yang belum terindeks.
 - Label Valid, Sebagian valid, Dugaan halusinasi, dan Tidak terverifikasi beserta alasan dan bukti.
 - Laporan dengan filter, pencarian, perbandingan metadata, koreksi manual, tautan Scholar/GARUDA, ekspor CSV, dan cetak/PDF browser.
 - Deteksi sumber akademik Indonesia (GARUDA, SINTA, repositori kampus, regulasi RI) dengan badge kategori dan tautan pencarian portal nasional.
@@ -54,7 +54,7 @@ LLM_MODEL=llama-3.3-70b-versatile
 NEXT_PUBLIC_DEMO_MODE=true
 ```
 
-- `CROSSREF_MAILTO`: email aktif yang dikirim pada parameter `mailto` dan User-Agent untuk Crossref polite pool.
+- `CROSSREF_MAILTO`: email aktif yang dikirim pada parameter `mailto` dan User-Agent untuk polite pool Crossref sekaligus OpenAlex.
 - `LLM_BASE_URL`: URL dasar versi API, **tanpa** `/chat/completions`. Contoh Ollama lokal: `http://localhost:11434/v1`.
 - `LLM_API_KEY`: rahasia provider. Boleh dikosongkan untuk server lokal seperti Ollama yang tidak memerlukan autentikasi.
 - `LLM_MODEL`: nama model persis dari provider. Model harus mampu mengikuti instruksi dan menghasilkan JSON.
@@ -77,14 +77,13 @@ Kontrak JSON, nama key, dan nilai source_type yang diizinkan dikunci sistem dan 
 1. **Ekstraksi** dilakukan lokal di route handler Node. PDF memakai `unpdf`; DOCX memakai `mammoth`. Bagian Daftar Pustaka/References terakhir diambil sampai Lampiran atau akhir dokumen.
 2. **Segmentasi** menggunakan penomoran, baris kosong, dan pola penulis-tahun. Pengguna meninjau serta dapat mengubah, menambah, atau menghapus entri.
 3. **Parsing LLM** dilakukan per entri dengan temperature 0. DOI juga diekstrak lebih dahulu dengan regex. Output divalidasi zod dan dicoba maksimal tiga kali total.
-4. **Crossref** menjadi satu-satunya sumber fakta keberadaan karya. DOI diperiksa dengan `/works/{doi}`; 404 dilanjutkan ke `/works/{doi}/agency`. DOI yang merujuk karya lain memicu pencarian teks.
+4. **Crossref** menjadi sumber utama fakta keberadaan karya. DOI diperiksa dengan `/works/{doi}`; 404 dilanjutkan ke `/works/{doi}/agency`. DOI yang merujuk karya lain memicu pencarian teks.
 5. **Pencarian teks** memakai satu `query.bibliographic` berisi referensi lengkap, `rows=5`, dan field `select` yang diperlukan. Tidak ada filter terpisah.
 6. **Matching** memakai normalized Levenshtein dan Jaro-Winkler. Kandidat berambang tinggi langsung ditemukan; kandidat ambigu dapat dibandingkan LLM; kandidat rendah tidak ditemukan.
-7. **Pelabelan** membedakan metadata berbeda, sumber di luar cakupan Crossref, DOI agency lain, kegagalan parsing, dan referensi jurnal/konferensi yang tidak ditemukan.
+7. **Fallback OpenAlex**: bila Crossref tidak menghasilkan kandidat yang memadai, sistem mencari di OpenAlex sebagai indeks pelengkap; hasilnya dinilai dengan matcher yang sama dan digabung dengan kandidat Crossref.
+8. **Pelabelan** membedakan metadata berbeda, sumber di luar cakupan Crossref, DOI agency lain, kegagalan parsing, dan referensi jurnal/konferensi yang tidak ditemukan.
 
 Bobot serta `T_high`/`T_low` awal berada di `src/lib/config.ts`. Nilai tersebut adalah titik awal rekayasa, **belum dikalibrasi dengan dataset validasi penelitian**.
-
-## Mode demo
 
 Buka `/result/demo` atau klik **Lihat demo** di beranda. Demo berisi empat hasil tersimpan yang memperlihatkan semua label dan perbandingan bukti. Demo tidak memanggil LLM maupun Crossref dan selalu ditandai sebagai data contoh.
 
@@ -102,11 +101,11 @@ Ringkasan hasil pengujian end-to-end pada dataset benchmark 60 entri (15 per kel
 
 | Metrik | Nilai |
 | :--- | :--- |
-| Akurasi keseluruhan | 80,00% (48/60) |
-| Macro-F1 | 0,7910 |
-| Recall *diduga halusinasi* | 100% (15/15) |
+| Akurasi keseluruhan | 81,67% (49/60) |
+| Macro-F1 | 0,8125 |
+| Recall *diduga halusinasi* | 93% (14/15) |
 | Recall *belum terverifikasi* | 100% (15/15) |
-| Rata-rata waktu pemrosesan | 3,95 detik per referensi |
+| Rata-rata waktu pemrosesan | 7,99 detik per referensi |
 
 Rincian per label, confusion matrix, dan pembahasan ada di [LAPORAN_BENCHMARK.md](LAPORAN_BENCHMARK.md); posisi riset terhadap penelitian pembanding ada di [ANALISIS_NOVELTY.md](ANALISIS_NOVELTY.md).
 

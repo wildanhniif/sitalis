@@ -25,7 +25,7 @@ export function matchCandidate(entry: ParsedReference, work: CrossrefWork): Cand
   const workYear = yearOf(work);
   const titleScore = titleSimilarity(entry.title, workTitle);
   const authorsScore = authorScore(entry, work);
-  const yearScore = entry.year == null || workYear == null ? 0.5 : Math.abs(entry.year - workYear) <= 1 ? 1 : 0;
+  const yearScore = entry.year == null || workYear == null ? 0.5 : Math.max(0, 1 - 0.2 * Math.abs(entry.year - workYear));
   const containerScore = !entry.container || !workContainer
     ? entry.container ? 0 : 0.5
     : jaroWinklerSimilarity(entry.container, workContainer);

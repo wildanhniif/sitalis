@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { z } from "zod";
 import { getCrossrefClient } from "@/lib/crossref/client";
+import { getOpenAlexClient } from "@/lib/openalex/client";
 import { parseCsv } from "@/lib/csv";
 import { calculateMetrics, type EvaluationInput } from "@/lib/evaluation";
 import { LlmClient } from "@/lib/llm/client";
@@ -80,10 +81,11 @@ async function runBenchmark(job: JobState, config: z.infer<typeof runSchema>): P
     job.total = inputs.length;
     const llm = new LlmClient({ baseUrl: config.baseUrl, apiKey: config.apiKey, model: config.model });
     const crossref = getCrossrefClient();
+    const openalex = getOpenAlexClient();
     const results: CheckResult[] = [];
     for (let index = 0; index < inputs.length; index++) {
       job.current = inputs[index].id;
-      results.push(await checkReference(inputs[index].reference_text, { crossref, llm }, inputs[index].id));
+      results.push(await checkReference(inputs[index].reference_text, { crossref, llm, openalex }, inputs[index].id));
       job.done = index + 1;
     }
     const metrics = {
