@@ -93,15 +93,16 @@ export class CrossrefClient {
 
   private async request<T>(
     path: string,
-    schema: z.ZodType<T, z.ZodTypeDef, unknown>,
+    schema: z.ZodType<T>,
     allowNotFound = false,
   ): Promise<T | null> {
     for (let attempt = 0; attempt <= this.retries; attempt++) {
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), this.timeoutMs);
       try {
-        const separator = path.includes("?") ? "&" : "?";
-        const response = await this.fetcher(`https://api.crossref.org${path}${separator}mailto=${encodeURIComponent(this.options.email)}`, {
+        const url = new URL(`https://api.crossref.org${path}`);
+        url.searchParams.set("mailto", this.options.email);
+        const response = await this.fetcher(url.toString(), {
           headers: {
             Accept: "application/json",
             "User-Agent": `CekSitasi/1.0 (mailto:${this.options.email})`,
